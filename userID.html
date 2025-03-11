@@ -27,7 +27,7 @@
                     const userId = encodeURIComponent(profile.userId);
 
                     // ✅ 替換為你的 Google Apps Script Web App URL
-                    const googleScriptURL = "https://script.google.com/macros/s/AKfycbzSkuyMKkRapXTDkszEuIUuzZLMJ2E3ASEVhNiM4mmTPPa7D0Gdc8qcnIJuV4XQSNjMKQ/exec";
+                    const googleScriptURL = "https://script.google.com/macros/s/AKfycbyBhwfNyAcFHUkze5Zf0PMCJtRfZdwhpArm7rgEwBe6yiW8l-h_igkpisq7zJB0tvnQKw/exec";
 
                     // ✅ 透過 Fetch API 直接提交
                     fetch(`${googleScriptURL}?userName=${userName}&userId=${userId}`, { mode: 'no-cors' })
