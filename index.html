@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFF 測試</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    <h1>LINE LIFF 測試頁面</h1>
+    <button onclick="login()">登入 LINE</button>
+    <button onclick="getUserProfile()">獲取用戶資訊</button>
+    <p id="userInfo"></p>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            liff.init({ liffId: "2007051903-2ajakdbl" }) 
+                .then(() => {
+                    console.log("LIFF 初始化成功");
+                })
+                .catch(err => {
+                    console.error("LIFF 初始化失敗:", err);
+                });
+        });
+
+        function login() {
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            }
+        }
+
+        function getUserProfile() {
+            if (liff.isLoggedIn()) {
+                liff.getProfile()
+                    .then(profile => {
+                        document.getElementById("userInfo").innerText =
+                            `使用者名稱: ${profile.displayName}`;
+                    })
+                    .catch(err => console.error("獲取用戶資訊失敗:", err));
+            } else {
+                alert("請先登入 LINE");
+            }
+        }
+    </script>
+</body>
+</html>
