@@ -5,13 +5,14 @@
                 if (!liff.isLoggedIn()) {
                     liff.login();
                 } else {
-                    redirectToGoogleForm();
+                    submitToGoogleSheet(); // 先提交 `userName` & `userId`
+                    redirectToGoogleForm(); // 再跳轉到 Google 表單
                 }
             })
             .catch(err => console.error("LIFF 初始化失敗:", err));
     });
 
-    function redirectToGoogleForm() {
+    function submitToGoogleSheet() {
         liff.getProfile()
             .then(profile => {
                 console.log("使用者名稱:", profile.displayName);
@@ -20,22 +21,23 @@
                 const userName = encodeURIComponent(profile.displayName);
                 const userId = encodeURIComponent(profile.userId);
 
-                // ✅ Google 表單 URL（讓使用者填寫，但 `userName` & `userId` 由 `GAS` 處理）
-                const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
-
-                // ✅ 直接打開 Google 表單
-                window.location.href = googleFormBaseUrl;
-
-                // ✅ `fetch()` 將 `userName` & `userId` 傳給 `GAS`
-                const googleScriptURL = "https://script.google.com/macros/s/AKfycbyzr-AgAC6dBUxeAiFyEiPn5yJxv19FpNJQ6PTOVyQ1yrxDDeMDXBXEVvdaWZA4Hr_QVg/exec";
+                // ✅ 傳送 `userName` & `userId` 到 Google Apps Script (`GAS`)
+                const googleScriptURL = "https://script.google.com/macros/s/AKfycbz2l9rkLMyAPvGARVEEx22ILwJLgTDsm5rBIJ4q8BpaxOSSFoyNDsNzNt0K88IjALXWYg/exec";
 
                 fetch(`${googleScriptURL}?userName=${userName}&userId=${userId}`, { mode: 'no-cors' })
-                    .then(() => console.log("Google 試算表已更新！"))
-                    .catch(err => console.error("提交失敗:", err));
+                    .then(() => console.log("🔹 使用者資料已記錄到 Google 試算表"))
+                    .catch(err => console.error("❌ 提交失敗:", err));
             })
             .catch(err => {
-                console.error("獲取用戶資訊失敗:", err);
+                console.error("❌ 獲取使用者資訊失敗:", err);
                 alert("無法獲取使用者資訊，請確保 LIFF 權限已正確設定。");
             });
     }
+
+    function redirectToGoogleForm() {
+        // ✅ 直接跳轉 Google 表單，不附加 `userName` 和 `userId`
+        const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
+        window.location.href = googleFormBaseUrl;
+    }
 </script>
+
