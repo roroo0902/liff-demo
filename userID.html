@@ -11,6 +11,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             liff.init({ liffId: "2007051903-2ajakdbl" }) // ✅ 替換為你的 LIFF ID
                 .then(() => {
+                    console.log("LIFF 初始化成功");
                     if (liff.isLoggedIn()) {
                         redirectToGoogleForm();
                     } else {
@@ -25,16 +26,16 @@
         function redirectToGoogleForm() {
             liff.getProfile()
                 .then(profile => {
+                    console.log("使用者名稱:", profile.displayName);
+                    console.log("使用者 ID:", profile.userId);
+
                     const userName = encodeURIComponent(profile.displayName);
                     const userId = encodeURIComponent(profile.userId);
 
-                    // ✅ Google 表單預填網址
                     const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
-
-                    // ✅ 只填入「使用者名稱」和「使用者 ID」
                     const googleFormUrl = `${googleFormBaseUrl}&entry.1580318749=${userName}&entry.1649168109=${userId}`;
 
-                    // ✅ 直接跳轉到 Google 表單
+                    console.log("即將跳轉至:", googleFormUrl);
                     window.location.href = googleFormUrl;
                 })
                 .catch(err => console.error("獲取用戶資訊失敗:", err));
