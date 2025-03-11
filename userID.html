@@ -25,24 +25,24 @@
         function redirectToGoogleForm() {
             liff.getProfile()
                 .then(profile => {
-                    console.log("✅ 使用者名稱:", profile.displayName);
-                    console.log("✅ 使用者 ID:", profile.userId);
-
                     const userName = encodeURIComponent(profile.displayName);
                     const userId = encodeURIComponent(profile.userId);
 
-                    // ✅ Google 表單 URL
+                    // ✅ Google 表單更新後的預填網址
                     const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
 
-                    // ✅ 正確的 `entry` 參數
-                    const googleFormUrl = `${googleFormBaseUrl}&entry.1736230286=${userName}&entry.195451929=未知&entry.1649168109=${userId}&entry.1580318749=${userName}`;
+                    // ✅ 正確填入新的 `entry` 參數
+                    const googleFormUrl = `${googleFormBaseUrl}
+                        &entry.1736230286=${userName}  // 名字
+                        &entry.195451929=未知         // 性別 (如果需要可額外獲取)
+                        &entry.1649168109=${userId}    // 使用者 ID
+                        &entry.1580318749=${userName}`; // 使用者名稱
 
                     // ✅ 自動跳轉到 Google 表單
                     window.location.href = googleFormUrl;
                 })
-                .catch(err => console.error("❌ 獲取用戶資訊失敗:", err));
+                .catch(err => console.error("獲取用戶資訊失敗:", err));
         }
     </script>
 </body>
 </html>
-
