@@ -27,7 +27,7 @@
                 window.location.href = googleFormBaseUrl;
 
                 // ✅ `fetch()` 將 `userName` & `userId` 傳給 `GAS`
-                const googleScriptURL = "https://script.google.com/macros/s/AKfycbxsCT0zroN3yww6JLVjrBJ9xJU3HxnOwREGLPGvCqyOuJpWP9wguT4l3BInF2s_7zdWvA/exec";
+                const googleScriptURL = "https://script.google.com/macros/s/AKfycbyzr-AgAC6dBUxeAiFyEiPn5yJxv19FpNJQ6PTOVyQ1yrxDDeMDXBXEVvdaWZA4Hr_QVg/exec";
 
                 fetch(`${googleScriptURL}?userName=${userName}&userId=${userId}`, { mode: 'no-cors' })
                     .then(() => console.log("Google 試算表已更新！"))
