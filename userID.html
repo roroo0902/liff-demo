@@ -3,20 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIFF + Google 表單</title>
+    <title>跳轉中...</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-    <h1>自動填入 Google 表單</h1>
-    <p id="userInfo">載入中...</p>
-    <a id="googleFormLink" target="_blank">點此填寫 Google 表單</a>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             liff.init({ liffId: "2007051903-2ajakdbl" }) // ✅ 替換為你的 LIFF ID
                 .then(() => {
                     if (liff.isLoggedIn()) {
-                        getUserProfile();
+                        redirectToGoogleForm();
                     } else {
                         liff.login();
                     }
@@ -26,23 +22,20 @@
                 });
         });
 
-        function getUserProfile() {
+        function redirectToGoogleForm() {
             liff.getProfile()
                 .then(profile => {
                     const userName = encodeURIComponent(profile.displayName);
                     const userId = encodeURIComponent(profile.userId);
-                    
-                    document.getElementById("userInfo").innerText = 
-                        `使用者名稱: ${profile.displayName}\n使用者 ID: ${profile.userId}`;
 
-                    // ✅ 替換你的 Google 表單 URL
+                    // ✅ Google 表單預填網址（替換為你的表單 URL）
                     const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
-                    
-                    // ✅ 將 LIFF 取得的資料自動填入 Google 表單（移除不必要的註解）
+
+                    // ✅ 自動填入 LINE 使用者名稱 & ID
                     const googleFormUrl = `${googleFormBaseUrl}&entry.1580318749=${userName}&entry.1649168109=${userId}`;
 
-                    // ✅ 更新 Google 表單連結
-                    document.getElementById("googleFormLink").href = googleFormUrl;
+                    // ✅ 直接跳轉到 Google 表單
+                    window.location.href = googleFormUrl;
                 })
                 .catch(err => console.error("獲取用戶資訊失敗:", err));
         }
