@@ -7,7 +7,7 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-    <h1 id="message">阿文沒上宗師,但像鬃獅犬一樣大隻...</h1>
+    <h1 id="message">阿文沒上宗師,但像鬃獅犬一樣鮪大...</h1>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -28,28 +28,34 @@
         });
 
         function getUserProfile() {
-            liff.getProfile()
-                .then(profile => {
-                    console.log("✅ 使用者名稱:", profile.displayName);
-                    console.log("✅ 使用者 ID:", profile.userId);
+            try {
+                liff.getProfile()
+                    .then(profile => {
+                        console.log("✅ 使用者名稱:", profile.displayName);
+                        console.log("✅ 使用者 ID:", profile.userId);
 
-                    // ✅ 將使用者資訊存入 `localStorage`
-                    localStorage.setItem("userName", profile.displayName);
-                    localStorage.setItem("userId", profile.userId);
+                        // ✅ 將使用者資訊存入 `localStorage`
+                        localStorage.setItem("userName", profile.displayName);
+                        localStorage.setItem("userId", profile.userId);
 
-                    // ✅ 顯示跳轉中的訊息（不顯示 `userName` 和 `userId`）
-                    document.getElementById("message").innerText = "登入成功，正在跳轉...";
+                        // ✅ 顯示跳轉中的訊息（不顯示 `userName` 和 `userId`）
+                        document.getElementById("message").innerText = "登入成功，正在跳轉...";
 
-                    // ✅ 2 秒後自動跳轉到 `userID.html`
-                    setTimeout(() => {
-                        window.location.href = "userID.html";
-                    }, 2000); 
-                })
-                .catch(err => {
-                    console.error("❌ 獲取用戶資訊失敗:", err);
-                    document.getElementById("message").innerText = "無法獲取使用者資訊，請重新整理";
-                });
+                        // ✅ 2 秒後自動跳轉到 `userID.html`
+                        setTimeout(() => {
+                            window.location.href = "userID.html";
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error("❌ 獲取用戶資訊失敗:", err);
+                        document.getElementById("message").innerText = "無法獲取使用者資訊，請重新整理";
+                    });
+            } catch (error) {
+                console.error("❌ 獲取用戶資訊時發生錯誤:", error);
+                document.getElementById("message").innerText = "系統錯誤：" + error.message;
+            }
         }
     </script>
 </body>
 </html>
+
