@@ -3,52 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <title>Google 表單</title>
 </head>
 <body>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            liff.init({ liffId: "2007051903-2ajakdbl" })  // ✅ 替換為你的 LIFF ID
+            // ✅ 讀取 `localStorage` 內的 `userId` 和 `userName`
+            const userName = encodeURIComponent(localStorage.getItem("userName") || "未知使用者");
+            const userId = encodeURIComponent(localStorage.getItem("userId") || "未知 ID");
+
+            // ✅ 送 `userName` 和 `userId` 到 `Google Apps Script`
+            const googleScriptURL = "https://script.google.com/macros/s/AKfycbyrnqlfMmfMenhhIlcf9OIqBj81rn1u-VWT9UOxkG8b7ONwMIlopqZtm7uSaT1zdYx1Xw/exec";
+
+            fetch(`${googleScriptURL}?userName=${userName}&userId=${userId}`, { mode: 'no-cors' })
                 .then(() => {
-                    if (!liff.isLoggedIn()) {
-                        liff.login();  // ✅ 自動登入
-                    } else {
-                        submitToGoogleSheet();
-                    }
+                    console.log("🔹 使用者資料已記錄到 Google 試算表");
+
+                    // ✅ 自動跳轉到 Google 表單（不顯示 `userId` & `userName`）
+                    const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
+                    window.location.href = googleFormBaseUrl;
                 })
-                .catch(() => {
-                    alert("LIFF 初始化失敗，請稍後再試！");
-                    redirectToGoogleForm(); // ✅ 如果 LIFF 失敗，仍然跳轉表單
-                });
+                .catch(err => console.error("❌ 提交失敗:", err));
         });
-
-        function submitToGoogleSheet() {
-            liff.getProfile()
-                .then(profile => {
-                    const userName = encodeURIComponent(profile.displayName);
-                    const userId = encodeURIComponent(profile.userId);
-
-                    // ✅ 送 `userName` & `userId` 到 Google 試算表（不透過 Google 表單）
-                    const googleScriptURL = "https://script.google.com/macros/s/AKfycbxrHthvqsGO4TreFfIe5w60nC8mQNY3Ue6CP8GfGRL9wrgC1pSjFFz9g-IMZGSjEansmA/exec";
-
-                    fetch(`${googleScriptURL}?userName=${userName}&userId=${userId}`, { mode: 'no-cors' })
-                        .then(() => console.log("🔹 使用者資料已記錄到 Google 試算表"))
-                        .catch(err => console.error("❌ 提交失敗:", err));
-                })
-                .catch(() => {
-                    alert("無法獲取用戶資訊，請確保 LIFF 權限已正確設定！");
-                })
-                .finally(() => {
-                    redirectToGoogleForm(); // ✅ 無論成功或失敗，都跳轉 Google 表單
-                });
-        }
-
-        function redirectToGoogleForm() {
-            // ✅ 直接跳轉到 Google 表單（不附加 `userId` 和 `userName`）
-            window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
-        }
     </script>
 </body>
 </html>
-
