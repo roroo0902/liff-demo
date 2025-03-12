@@ -17,7 +17,7 @@
             document.getElementById("userInfo").innerText = `使用者名稱: ${userName}\n使用者 ID: ${userId}`;
 
             // ✅ 自動提交到 Google 試算表
-            const googleScriptURL = "https://script.google.com/macros/s/YOUR_GAS_SCRIPT/exec";
+            const googleScriptURL = "https://script.google.com/macros/s/AKfycbx1DEq-zz_JIYRbI1dEq4ypyzgLHqgQEaq8A18jAjXIDjFlT5gpiQDldImt2aVMPQ-2Rw/exec";
 
             fetch(`${googleScriptURL}?userName=${encodeURIComponent(userName)}&userId=${encodeURIComponent(userId)}`, { mode: 'no-cors' })
                 .then(() => console.log("🔹 使用者資料已提交到 Google 試算表"))
