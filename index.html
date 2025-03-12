@@ -7,14 +7,10 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-    <h1 id="message">阿文沒上宗師,但像鬃獅犬一樣鮪大...</h1>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            liff.init({ liffId: "2007051903-2ajakdbl" })  // ✅ 替換為你的 `LIFF ID`
+            liff.init({ liffId: "2007051903-2ajakdbl" })
                 .then(() => {
-                    console.log("✅ LIFF 初始化成功");
-
                     if (!liff.isLoggedIn()) {
                         liff.login();  // ✅ 未登入時，自動登入
                     } else {
@@ -38,7 +34,7 @@
                     localStorage.setItem("userId", profile.userId);
 
                     // ✅ 送 `userName` & `userId` 到 Google 試算表
-                    const googleScriptURL = "https://script.google.com/macros/s/AKfycbxrHthvqsGO4TreFfIe5w60nC8mQNY3Ue6CP8GfGRL9wrgC1pSjFFz9g-IMZGSjEansmA/exec";
+                    const googleScriptURL = "https://script.google.com/macros/s/你的_GAS_網址/exec";
 
                     fetch(`${googleScriptURL}?userName=${encodeURIComponent(profile.displayName)}&userId=${encodeURIComponent(profile.userId)}`, { mode: 'no-cors' })
                         .then(() => console.log("🔹 使用者資料已記錄到 Google 試算表"))
@@ -53,10 +49,18 @@
         }
 
         function redirectToGoogleForm() {
-            // ✅ 直接跳轉到 Google 表單
-            window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
+            const userName = encodeURIComponent(localStorage.getItem("userName") || "未知使用者");
+            const userId = encodeURIComponent(localStorage.getItem("userId") || "未知 ID");
+
+            // ✅ Google 表單 URL
+            const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
+
+            // ✅ 讓 `userName` & `userId` 自動填入
+            const googleFormUrl = `${googleFormBaseUrl}&entry.1736230286=${userName}&entry.1649168109=${userId}`;
+
+            // ✅ 跳轉到 Google 表單
+            window.location.href = googleFormUrl;
         }
     </script>
 </body>
 </html>
-
