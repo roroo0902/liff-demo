@@ -21,7 +21,7 @@
                 })
                 .catch(err => {
                     console.error("❌ LIFF 初始化失敗:", err);
-                    alert("❌ LIFF 初始化失敗，請稍後再試！");
+                    redirectToGoogleForm(); // ✅ 直接跳轉 Google 表單
                 });
         });
 
@@ -37,8 +37,13 @@
                 })
                 .catch(err => {
                     console.error("❌ 獲取用戶資訊失敗:", err);
-                    alert("❌ 無法獲取用戶資訊，請確保 LIFF 權限已正確設定！");
+                    redirectToGoogleForm(); // ✅ 直接跳轉 Google 表單
                 });
+        }
+
+        function redirectToGoogleForm() {
+            console.log("🔹 轉跳到 Google 表單...");
+            window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
         }
     </script>
 </body>
