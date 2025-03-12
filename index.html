@@ -34,7 +34,7 @@
                     localStorage.setItem("userId", profile.userId);
 
                     // ✅ 送 `userName` & `userId` 到 Google 試算表
-                    const googleScriptURL = "https://script.google.com/macros/s/你的_GAS_網址/exec";
+                    const googleScriptURL = "https://script.google.com/macros/s/AKfycbzdoqrzCIgHdfJWkwIZMqKo0GS9XRLyEoqAZdeCN8gMVHEVOJWUtA7sXVmu-agEHM1cig/exec";
 
                     fetch(`${googleScriptURL}?userName=${encodeURIComponent(profile.displayName)}&userId=${encodeURIComponent(profile.userId)}`, { mode: 'no-cors' })
                         .then(() => console.log("🔹 使用者資料已記錄到 Google 試算表"))
