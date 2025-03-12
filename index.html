@@ -7,7 +7,8 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-    <h1 id="message">阿文沒上宗師,但像鬃獅犬一樣鮪大...</h1>
+    <h1>LINE LIFF 測試頁面</h1>
+    <p id="userInfo">載入中...</p>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -18,45 +19,36 @@
                     if (!liff.isLoggedIn()) {
                         liff.login();  // ✅ 未登入時，自動登入
                     } else {
-                        submitToGoogleSheet();  // ✅ 已登入時，直接提交資料
+                        getUserProfile();  // ✅ 已登入時，自動執行
                     }
                 })
-                .catch(() => {
-                    console.error("❌ LIFF 初始化失敗");
-                    redirectToGoogleForm(); // ✅ LIFF 失敗時，直接跳轉 Google 表單
-                });
+                .catch(err => console.error("❌ LIFF 初始化失敗:", err));
         });
 
-        function submitToGoogleSheet() {
+        function getUserProfile() {
             liff.getProfile()
                 .then(profile => {
                     console.log("✅ 使用者名稱:", profile.displayName);
                     console.log("✅ 使用者 ID:", profile.userId);
 
+                    // ✅ 在畫面上顯示使用者資訊
+                    document.getElementById("userInfo").innerText =
+                        `使用者名稱: ${profile.displayName}\n使用者 ID: ${profile.userId}`;
+
                     // ✅ 將使用者資訊存入 `localStorage`
                     localStorage.setItem("userName", profile.displayName);
                     localStorage.setItem("userId", profile.userId);
 
-                    // ✅ 送 `userName` & `userId` 到 Google 試算表
-                    const googleScriptURL = "https://script.google.com/macros/s/AKfycbxrHthvqsGO4TreFfIe5w60nC8mQNY3Ue6CP8GfGRL9wrgC1pSjFFz9g-IMZGSjEansmA/exec";
-
-                    fetch(`${googleScriptURL}?userName=${encodeURIComponent(profile.displayName)}&userId=${encodeURIComponent(profile.userId)}`, { mode: 'no-cors' })
-                        .then(() => console.log("🔹 使用者資料已記錄到 Google 試算表"))
-                        .catch(err => console.error("❌ 提交失敗:", err));
+                    // ✅ 自動跳轉到 `userID.html`
+                    setTimeout(() => {
+                        window.location.href = "userID.html";
+                    }, 2000); // 2 秒後跳轉
                 })
-                .catch(() => {
-                    console.error("❌ 無法獲取用戶資訊");
-                })
-                .finally(() => {
-                    redirectToGoogleForm(); // ✅ 無論成功或失敗，都跳轉 Google 表單
+                .catch(err => {
+                    console.error("❌ 獲取用戶資訊失敗:", err);
+                    alert("❌ 無法獲取使用者資訊，請確保 LIFF 權限已正確設定！");
                 });
-        }
-
-        function redirectToGoogleForm() {
-            // ✅ 直接跳轉到 Google 表單
-            window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
         }
     </script>
 </body>
 </html>
-
