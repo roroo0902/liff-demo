@@ -8,45 +8,46 @@
 </head>
 <body>
     <h1>LINE LIFF 測試頁面</h1>
-    <button onclick="login()">登入 LINE</button>
-    <button onclick="getUserProfile()">獲取用戶資訊</button>
-    <p id="userInfo"></p>
+    <p id="userInfo">載入中...</p>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            liff.init({ liffId: "2007051903-2ajakdbl" })  // 使用你的 LIFF ID
+            liff.init({ liffId: "2007051903-2ajakdbl" })  // ✅ 替換為你的 `LIFF ID`
                 .then(() => {
-                    console.log("LIFF 初始化成功");
-                    if (liff.isLoggedIn()) {
-                        getUserProfile();
+                    console.log("✅ LIFF 初始化成功");
+
+                    if (!liff.isLoggedIn()) {
+                        liff.login();  // ✅ 未登入時，自動登入
                     } else {
-                        liff.login();
+                        getUserProfile();  // ✅ 已登入時，自動執行
                     }
                 })
-                .catch(err => {
-                    console.error("LIFF 初始化失敗:", err);
-                });
+                .catch(err => console.error("❌ LIFF 初始化失敗:", err));
         });
 
-        function login() {
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            }
-        }
-
         function getUserProfile() {
-            if (liff.isLoggedIn()) {
-                liff.getProfile()
-                    .then(profile => {
-                        console.log("使用者名稱:", profile.displayName);
-                        console.log("使用者 ID:", profile.userId);
-                        document.getElementById("userInfo").innerText =
-                            `使用者名稱: ${profile.displayName}\n使用者 ID: ${profile.userId}`;
-                    })
-                    .catch(err => console.error("獲取用戶資訊失敗:", err));
-            } else {
-                alert("請先登入 LINE");
-            }
+            liff.getProfile()
+                .then(profile => {
+                    console.log("✅ 使用者名稱:", profile.displayName);
+                    console.log("✅ 使用者 ID:", profile.userId);
+
+                    // ✅ 在畫面上顯示使用者資訊
+                    document.getElementById("userInfo").innerText =
+                        `使用者名稱: ${profile.displayName}\n使用者 ID: ${profile.userId}`;
+
+                    // ✅ 將使用者資訊存入 `localStorage`
+                    localStorage.setItem("userName", profile.displayName);
+                    localStorage.setItem("userId", profile.userId);
+
+                    // ✅ 自動跳轉到 `userID.html`
+                    setTimeout(() => {
+                        window.location.href = "userID.html";
+                    }, 2000); // 2 秒後跳轉
+                })
+                .catch(err => {
+                    console.error("❌ 獲取用戶資訊失敗:", err);
+                    alert("❌ 無法獲取使用者資訊，請確保 LIFF 權限已正確設定！");
+                });
         }
     </script>
 </body>
