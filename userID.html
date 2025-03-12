@@ -13,7 +13,7 @@
             const userId = encodeURIComponent(localStorage.getItem("userId") || "未知 ID");
 
             // ✅ 送 `userName` 和 `userId` 到 `Google Apps Script`
-            const googleScriptURL = "https://script.google.com/macros/s/AKfycbzdoqrzCIgHdfJWkwIZMqKo0GS9XRLyEoqAZdeCN8gMVHEVOJWUtA7sXVmu-agEHM1cig/exec";
+            const googleScriptURL = "https://script.google.com/macros/s/AKfycbx1DEq-zz_JIYRbI1dEq4ypyzgLHqgQEaq8A18jAjXIDjFlT5gpiQDldImt2aVMPQ-2Rw/exec";
 
             fetch(`${googleScriptURL}?userName=${userName}&userId=${userId}`, { mode: 'no-cors' })
                 .then(() => {
