@@ -1,57 +1,50 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LIFF 登入</title>
-  <!-- 引入 LIFF SDK -->
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFF 登入</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-  <h1>正在登入...</h1>
+    <h1>正在登入...</h1>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        // 1. 初始化 LIFF
-        await liff.init({ liffId: "2007051903-2ajakdbl" }); // <-- 替換為你的 LIFF ID
-        
-        // 2. 檢查是否已登入
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          await handleUserProfile();
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            liff.init({ liffId: "2007051903-2ajakdbl" })  // ✅ 替換為你的 `LIFF ID`
+                .then(() => {
+                    if (!liff.isLoggedIn()) {
+                        liff.login();
+                    } else {
+                        getUserProfile();
+                    }
+                })
+                .catch(err => {
+                    console.error("❌ LIFF 初始化失敗:", err);
+                    redirectToGoogleForm(); // ✅ 直接跳轉 Google 表單
+                });
+        });
+
+        function getUserProfile() {
+            liff.getProfile()
+                .then(profile => {
+                    // ✅ 儲存 `userId` 和 `userName` 到 `localStorage`
+                    localStorage.setItem("userName", profile.displayName);
+                    localStorage.setItem("userId", profile.userId);
+
+                    // ✅ 跳轉到 `userID.html`
+                    window.location.href = "userID.html";
+                })
+                .catch(err => {
+                    console.error("❌ 獲取用戶資訊失敗:", err);
+                    redirectToGoogleForm(); // ✅ 直接跳轉 Google 表單
+                });
         }
-      } catch (err) {
-        console.error("❌ LIFF 初始化失敗:", err);
-        redirectToGoogleForm();
-      }
-    });
 
-    /**
-     * 取得使用者資料並存入 localStorage
-     */
-    async function handleUserProfile() {
-      try {
-        const profile = await liff.getProfile();
-        localStorage.setItem("userName", profile.displayName);
-        localStorage.setItem("userId", profile.userId);
-        // 跳轉至 userID.html
-        window.location.href = "userID.html";
-      } catch (err) {
-        console.error("❌ 獲取用戶資訊失敗:", err);
-        redirectToGoogleForm();
-      }
-    }
-
-    /**
-     * 轉跳到 Google 表單
-     */
-    function redirectToGoogleForm() {
-      console.log("🔹 轉跳到 Google 表單...");
-      window.location.href =
-        "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
-    }
-  </script>
+        function redirectToGoogleForm() {
+            console.log("🔹 轉跳到 Google 表單...");
+            window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
+        }
+    </script>
 </body>
 </html>
