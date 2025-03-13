@@ -15,19 +15,19 @@
                 // ✅ 初始化 LIFF
                 await liff.init({ liffId: "2007051903-2ajakdbl" });
 
-                // ✅ 如果用戶未登入，強制登入
+                // ✅ 如果用戶未登入，則強制登入
                 if (!liff.isLoggedIn()) {
                     liff.login();
                 } else {
-                    await sendUserDataToGAS();
+                    await sendUserDataToUserID();
                 }
             } catch (err) {
                 console.error("❌ LIFF 初始化失敗:", err);
-                redirectToGoogleForm();  // ❌ 直接跳轉 Google 表單
+                redirectToGoogleForm();  // ❌ 如果失敗則直接轉跳 Google 表單
             }
         });
 
-        async function sendUserDataToGAS() {
+        async function sendUserDataToUserID() {
             try {
                 const profile = await liff.getProfile();
                 const userName = encodeURIComponent(profile.displayName);
@@ -36,9 +36,14 @@
                 console.log("✅ 使用者名稱:", profile.displayName);
                 console.log("✅ 使用者 ID:", profile.userId);
 
-                // ✅ 轉跳到 GAS，讓 GAS 轉跳 Google 表單
-                const gasURL = "https://script.google.com/macros/s/AKfycbx2c64KFhCNl7DKxKEE2IL3zIeln9h4Ya8DMe03lKmvskxmJFVGb3kkOkvXLQn9u5DIEA/exec";
-                window.location.href = `${gasURL}?userName=${userName}&userId=${userId}`;
+                // ✅ 先儲存到 localStorage，避免遺失
+                localStorage.setItem("userName", profile.displayName);
+                localStorage.setItem("userId", profile.userId);
+
+                // ✅ 2 秒後跳轉到 userID.html
+                setTimeout(() => {
+                    window.location.href = "userID.html";
+                }, 2000);
             } catch (err) {
                 console.error("❌ 獲取使用者資訊失敗:", err);
                 redirectToGoogleForm();
