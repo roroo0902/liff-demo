@@ -3,32 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Google 表單</title>
+  <title>Google 表單 - 預填</title>
 </head>
 <body>
   <h1>請稍候，正在處理您的資料...</h1>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      // ✅ 從 localStorage 讀
       const userNameRaw = localStorage.getItem("userName") || "未知使用者";
       const userIdRaw = localStorage.getItem("userId") || "未知 ID";
 
       const userName = encodeURIComponent(userNameRaw);
       const userId = encodeURIComponent(userIdRaw);
 
-      console.log("📌 上傳資料到 Google 試算表:", { userName, userId });
+      console.log("📌 上傳資料到 Google Sheet:", { userNameRaw, userIdRaw });
 
-      // ✅ 送到 Google Apps Script → 寫到「使用者資料」工作表
+      // ✅ 送到 Google Apps Script → 寫到「使用者資料」
       const googleScriptURL = "https://script.google.com/macros/s/AKfycbzS8olvZRYjvck-OctPzsQFqdn92s6NUmpQgrM8iCOshhSOQnsDC2Lqp71Em2aBQdP-NA/exec";
 
-      fetch(`${googleScriptURL}?userName=${userNameRaw}&userId=${userIdRaw}`, { mode: 'no-cors' })
+      fetch(`${googleScriptURL}?userName=${userNameRaw}&userId=${userIdRaw}`, { mode: "no-cors" })
         .then(() => {
-          console.log("🔹 已寫到 Google Sheet");
+          console.log("✅ 已寫到 Google Sheet");
 
-          // ✅ 預填 userName 帶進 Google Form 的欄位
+          // ✅ 預填 userName 帶進 Google Form
           const formBase = "https://docs.google.com/forms/d/e/1FAIpQLSdEbGW1p4bO4PX2_chENNE_zv13uYV56MNXPNHhRyKlT6gMQg/viewform?usp=pp_url";
-
-          const entryID = "entry.1811506535";  // 👉 替換成你表單「使用者名稱」欄位的 ID
+          const entryID = "entry.1811506535"; // ⚡ 請換成你的表單「使用者名稱」欄位 ID
 
           const finalURL = `${formBase}&${entryID}=${userName}`;
           console.log("✅ 預填 userName，跳轉到:", finalURL);
