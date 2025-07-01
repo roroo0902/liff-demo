@@ -17,14 +17,14 @@
             console.log("📌 上傳資料到 Google 試算表:", { userName, userId });
 
             // ✅ 送 `userName` 和 `userId` 到 `Google Apps Script`
-            const googleScriptURL = "https://script.google.com/macros/s/AKfycbx1DEq-zz_JIYRbI1dEq4ypyzgLHqgQEaq8A18jAjXIDjFlT5gpiQDldImt2aVMPQ-2Rw/exec";
+            const googleScriptURL = "https://script.google.com/macros/s/AKfycbzS8olvZRYjvck-OctPzsQFqdn92s6NUmpQgrM8iCOshhSOQnsDC2Lqp71Em2aBQdP-NA/exec";
 
             fetch(`${googleScriptURL}?userName=${userName}&userId=${userId}`, { mode: 'no-cors' })
                 .then(() => {
                     console.log("🔹 使用者資料已記錄到 Google 試算表");
 
                     // ✅ 自動跳轉到 Google 表單（不顯示 `userId` & `userName`）
-                    const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSevkZz6ffohW_iUzzGp0Bzmq5TE2gHb3TEBVzQzI5JUcDhm8A/viewform?usp=pp_url";
+                    const googleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdEbGW1p4bO4PX2_chENNE_zv13uYV56MNXPNHhRyKlT6gMQg/viewform?usp=header";
                     window.location.href = googleFormBaseUrl;
                 })
                 .catch(err => console.error("❌ 提交失敗:", err));
