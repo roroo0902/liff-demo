@@ -19,14 +19,14 @@
       console.log("📌 上傳資料到 Google 試算表:", { userName, userId });
 
       // ✅ 送到 Google Apps Script → 寫到「使用者資料」工作表
-      const googleScriptURL = "https://script.google.com/macros/s/AKfycbzS8olvZRYjvck-OctPzsQFqdn92s6NUmpQgrM8iCOshhSOQnsDC2Lqp71Em2aBQdP-NA/exec";
+      const googleScriptURL = "https://script.google.com/macros/s/AKfycbw8shMPQjM3FGGRiX3Q3gQlQkSvqObenq3kQ2uD4LbHn3P7TlQ8xmIHd2_vLgRgCLSSFQ/exec";
 
       fetch(`${googleScriptURL}?userName=${userNameRaw}&userId=${userIdRaw}`, { mode: 'no-cors' })
         .then(() => {
           console.log("🔹 已寫到 Google Sheet");
 
           // ✅ 預填 userName 帶進 Google Form 的欄位
-          const formBase = "https://docs.google.com/forms/d/e/1FAIpQLSdEbGW1p4bO4PX2_chENNE_zv13uYV56MNXPNHhRyKlT6gMQg/viewform?usp=pp_url";
+          const formBase = "https://docs.google.com/forms/d/e/1FAIpQLSdEbGW1p4bO4PX2_chENNE_zv13uYV56MNXPNHhRyKlT6gMQg/viewform?usp=header";
 
           const entryID = "entry.1811506535";  // 👉 替換成你表單「使用者名稱」欄位的 ID
 
